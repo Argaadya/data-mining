@@ -1,17 +1,23 @@
 ---
-title: "Case Study : Predictive Lead Scoring"
+title: 'Case Study : Predictive Lead Scoring'
 author: "Team Algoritma"
 date: "11/10/2020"
-output: 
- html_document:
-   toc: true
-   toc_depth: 2
-   toc_float: true
-   number_sections: true
-   theme: flatly
-   highlight: zenburn
-   df_print: paged
-   css: style.css
+output:
+  html_document:
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+    number_sections: yes
+    theme: flatly
+    highlight: zenburn
+    df_print: paged
+    css: style.css
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
+  word_document:
+    toc: yes
+    toc_depth: '2'
 ---
 
 ```{r setup, include=FALSE}
@@ -25,18 +31,14 @@ knitr::opts_chunk$set(echo = F,
 ```{r message=FALSE, echo=FALSE}
 # Data Wrangling
 library(tidyverse)
-library(lubridate)
 
 # Model Fitting and Evaluation
 library(rsample)
 library(randomForest)
 library(yardstick)
-library(partykit)
 library(rpart)
-library(rpart.plot)
 
 # Visualization
-library(ggparty)
 library(scales)
 library(ggrepel)
 library(rattle)
@@ -47,6 +49,8 @@ options(scipen = 999)
 
 theme_set(theme_minimal())
 ```
+
+\newpage
 
 We will see how CRISP-DM applied in a business case study of increasing product sales by building a model to predict potential customers.
 
@@ -64,7 +68,7 @@ Our company sold an automotive product for over 20 years. However, for the last 
 df_rec <- read.csv("data/monthly_sales.csv")
 
 df_rec %>% 
-  mutate(date = ymd(date)) %>% 
+  mutate(date = as.Date(date)) %>% 
   ggplot(aes(date, sales, color = type, group = 1)) +
   geom_line() +
   geom_point(size = 1) +
@@ -335,7 +339,7 @@ A model is a representation of the world. Since it's just a representation, some
 
 > All models are wrong, but some are useful. - George Box
 
-```{r}
+```{r out.width="80%"}
 knitr::include_graphics("assets/model-map.jpg")
 ```
 
