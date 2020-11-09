@@ -1,0 +1,165 @@
+a {
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+p {
+    margin: 0 0 13px;
+    font-size: 1.1em;
+    font-family: Georgia, Times, "Times New Roman", serif;
+}
+
+.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+    z-index: 2;
+    color: #ffffff;
+    background-color: #d62c1a;
+    border-color: #e74c3c;
+}
+
+.nav>li>a:hover, .nav>li>a:focus {
+    text-decoration: none;
+    background-color: #1a242f;
+    color: white;
+}
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+    color: #2c3e50;
+    background-color: #ffffff;
+    border: 1px solid #1a242f;
+    border-bottom-color: transparent;
+    cursor: default;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #1a242f;
+}
+
+.tocify {
+	border: 1px solid #1a242f;
+}
+h1 {
+    font-size: 1.4em;
+    font-weight: bolder;
+}
+
+h2, h3 {
+    font-size: 1.2em;
+    font-weight: bolder;
+}
+
+h1.title {
+    font-size: 1.8em;
+}
+
+
+em {
+    color: #d72d1b;
+    margin-left: .5%;
+    margin-right: .5%;
+    font-weight: bold;
+}
+
+.date > em {
+    font-size: 0.8em;
+}
+
+h4.author > em {
+    color: white;
+    text-decoration: initial;
+    background: black;
+    border-radius: 6px;
+    padding: 6px 8px;
+    margin: 5% 0;
+    font-size: 0.8em;
+}
+
+code > span.kw {
+	color:#54b4eb;
+}
+
+p > code {
+    background-color: #ecf0f1!important;
+    padding: 1%;
+    margin: 0.4%;
+    font-weight: 600;
+}
+
+pre {
+	font-size:16px;
+	background-color: #1a242f;
+    border: 1px solid #e74c3c;
+}
+
+pre > code {
+    color: #656565;
+}
+
+code.sourceCode.r {
+    color: white;
+}
+
+code > span.ot {
+    color: #ef6d5f;
+}
+
+code > span.st {
+    color: #e74c3c;
+}
+
+code > span.dt {
+    color: #e74c3c;
+}
+
+code > span.dv {
+    color: #e74c3c;
+}
+
+code > span.fl {
+    color: #18bc9c;
+}
+
+#header:after {
+    content: " ";
+    display: block;
+    background-image: url(assets/logo.png);
+    background-size: 140px;
+    background-repeat: no-repeat;
+    height: 60px;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+
+blockquote:before {
+    content: open-quote;
+    font-size: 2.6em;
+    line-height: 0.1em;
+    margin-right: 2%;
+    vertical-align: -0.4em;
+    font-style: italic;
+    color: #e74c3c;
+}
+
+blockquote > p {
+    font-style: italic;
+    display: inline;
+}
+
+blockquote {
+    border-left: 5px solid #d72d1b;
+    border-right: 5px solid #d72d1b;
+}
+
+blockquote:after {
+    content: close-quote;
+    font-size: 2.6em;
+    margin-left: 2%;
+    line-height: 0.1em;
+    vertical-align: -0.4em;
+    font-style: italic;
+    color: #e74c3c;
+}
+
+
+
+
