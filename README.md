@@ -1,5 +1,7 @@
 # Solving Business Problem with Data Mining Approach
 
+![](assets/crisp-dm.png)
+
 Syllabus
 
 * What is Data Mining
