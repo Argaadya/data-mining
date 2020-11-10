@@ -6,7 +6,7 @@ The following coursebook is produced by the team at Algoritma. The coursebook is
 
 Algoritma is a data science education center based in Jakarta. We organize workshops and training programs to help working professionals and students gain mastery in various data science sub-fields: data visualization, machine learning, data modeling, statistical inference etc.
 
-In the era of data abundance, being a data-driven company can be a competitive advantage. In this workshop, you'lle learn more about the following topics:
+In the era of data abundance, being a data-driven company can be a competitive advantage. In this workshop, you will learn more about the following topics:
 
 * What is Data Mining
 * Data Mining Goal
