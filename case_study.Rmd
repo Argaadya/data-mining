@@ -3,6 +3,9 @@ title: 'Case Study : Predictive Lead Scoring'
 author: "Team Algoritma"
 date: "11/10/2020"
 output:
+  pdf_document:
+    toc: yes
+    toc_depth: '2'
   html_document:
     toc: yes
     toc_depth: 2
@@ -12,9 +15,6 @@ output:
     highlight: zenburn
     df_print: paged
     css: style.css
-  pdf_document:
-    toc: yes
-    toc_depth: '2'
   word_document:
     toc: yes
     toc_depth: '2'
@@ -62,15 +62,19 @@ knitr::include_graphics("assets/crisp-dm.png")
 
 ## Background
 
-Our company sold an automotive product for over 20 years. However, for the last 5 years the monthly average profit has been constant and did not gain any significant growth. The condition will remain the same in the future if we do not do something. However, with limited member of sales team, we don't have enough resource to attract more customer. We want to be efficient instead of keep expanding the team, so we need another approach. With limited time and resources, we need to be able to quickly inspect and prioritize which customer is a potential buyer. We will also need to formally research on what makes them buy our products. By doing this, we can achieve higher or the same amount of profit with cheaper cost. 
+Our company sold an automotive product for over 20 years. However, for the last 5 years the monthly average profit has been constant and did not gain any significant growth since the number of sales are remain stagnant as well. The condition will remain the same in the future if we do not do something. We have a lot of customer leads that can be a potential buyer. However, with limited member of sales team, we don't have enough resource to approach more customer. It would be very inefficient and wasting a lot of resource to target all the leads. We want to be efficient instead of keep expanding the team, so we need another approach. With limited time and resources, we need to be able to quickly inspect and prioritize which customer is a potential buyer. We will also need to formally research on what makes them buy our products. By doing this, we can achieve higher or the same amount of profit with cheaper cost. 
 
 ```{r} 
 df_rec <- read.csv("data/monthly_sales.csv")
 
+# get mean sales
+mean_profit <- mean(df_rec$sales)
+
 df_rec %>% 
   mutate(date = as.Date(date)) %>% 
   ggplot(aes(date, sales, color = type, group = 1)) +
-  geom_line() +
+  geom_line() +  
+  geom_hline(yintercept = mean_profit, lty = "dashed", color = "red", alpha = 0.7) +
   geom_point(size = 1) +
   scale_color_manual(values = c("firebrick", "dodgerblue4")) +
   scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
@@ -81,14 +85,22 @@ df_rec %>%
   labs(x = NULL, y = "Total Profit", color = NULL,
        subtitle = paste0("Average Profit : ", dollar(mean(df_rec$sales))),
        title = "Monthly Profit")
+
 ```
+
+In summary, our business problem is:
+
+* We have stagnant profit because the number of sales is constant
+* There are a lot of customer leads but we can't reach all of them
+* We need to know which customer leads that should be prioritized
+* We need lead scoring so that we can be efficent on targeting potential buyer
 
 ## Business Goals and KPI
 
 The business goal is determined together with other department. This part should be the continuation of the background problem.
 
 * Gain insight on what drives people to buy our product
-* Increase sales by 10% year over year
+* Increase profit by 10% year over year
 * Reduce annual marketing cost by 10%
 
 ## Data Mining Goals and KPI
@@ -595,10 +607,10 @@ The cost and benefit analysis is where we try to convert the machine learning pe
 
 The first we do is to define the cost and benefit of each decision. We will define it similar with the previous confusion matrix. The main cost is the cost of approaching a customer, in here we defined it as 600. The revenue generated for each customer is 1000, with the profit of 400 after we cut the revenue with the cost. 
 
-* **True Positive (TP)**: If the model predict customer **will buy** and the prediction is correct (customer buy), we will get a profit of 400 (1000 revenue - 600 cost)
-* **False Positive (FP)**: If the model predict customer **will buy** and the prediction is incorrect (customer not buy), we will lost 600 
-* **True Negative (TN)**: If the model predict customer **will not buy** and the prediction is correct (customer not buy), nothing happened
-* **False Negative (FN)**: If the model predict customer **will not buy** and the prediction is incorrect (customer buy), nothing happened
+* **True Positive (TP)**: If the model predict customer **will buy** and the prediction is correct **(customer actually buy)**, we will get a profit of 400 (1000 revenue - 600 cost)
+* **False Positive (FP)**: If the model predict customer **will buy** and the prediction is incorrect **(customer not buy)**, we will lost 600 
+* **True Negative (TN)**: If the model predict customer **will not buy** and the prediction is correct **(customer not buy)**, nothing happened
+* **False Negative (FN)**: If the model predict customer **will not buy** and the prediction is incorrect **(customer buy)**, nothing happened
 
 ```{r}
 # Define cost and benefit
@@ -622,16 +634,32 @@ We will prioritize the customer that has the highest probability to buy our prod
 ```{r}
 df_prediction_rf %>% 
   arrange(desc(Yes)) %>% 
+  select(-prediction) %>% 
   head(10)
 ```
 
-And we calculate for how many profit we will get if we target and approach only some percent of the total customer? For example, if we only target the top 10 customer and ignore the rest, we have correctly predict 9 customer as buy and only a single incorrect prediction (the actual buying decision is on the `truth` column). Thus, our profit would be: 
+And we calculate for how many profit we will get if we target and approach only some percent of the total customer? For example, if we only target the top 10 customer and ignore the rest, we have correctly predict 8 customer as buy and only a single incorrect prediction (the actual buying decision is on the `truth` column). Thus, our profit would be: 
 
 $$
-Profit = 9 \times 400 + (-600) = 3000
+Profit = 8 \times 400 + 2\times (-600) = 2000
 $$
 
-Since we have 0 cost and 0 benefit for negative prediction, we can skip the calculation and our final profit is only a mere 3000.
+Since we have 0 cost and 0 benefit for negative prediction, we can skip the calculation and our final profit is only a mere 2000.
+
+Now we increase the number of people that we will approach by using the top 20 leads based on their score.
+
+```{r}
+df_prediction_rf %>% 
+  arrange(desc(Yes)) %>% 
+  select(-prediction) %>% 
+  head(20)
+```
+
+From the top 20 leads, we get 18 correct prediction of buying and 2 incorrect prediction. Therefore, we will get a total profit of:
+
+$$
+Profit = 18 \times 400 + 2\times (-600) = 6000
+$$
 
 That's how we will calculate the profit. We will do the same thing but calculate some level of percent of people that will be targeted. The final result is the following profit curve, which shows the total profit that can be generated by targeting the top % of the customer.
 
@@ -642,8 +670,11 @@ df_profit <- data.frame(percent = percent_look) %>%
   mutate(top_n = round(nrow(data_test) * percent)) %>%
   bind_cols(map_df(percent_look, profit_class)) %>% 
   mutate("Random Classifier" = NA) %>% 
-  pivot_longer(cols = c(3:5), names_to = "model", values_to = "profit") 
+  pivot_longer(cols = c(3:5), names_to = "model", values_to = "profit")
+```
 
+
+```{r}
 lm_random <- lm(profit ~ percent, data.frame(profit = c(df_profit %>% filter(percent ==0) %>% pull(profit) %>% .[1], df_profit %>% filter(percent ==1) %>% pull(profit) %>% .[1]),
                                              percent = c(0, 1)
                                              ))
@@ -661,7 +692,6 @@ df_limit <- df_profit %>%
   filter(profit == max(profit))
 
 # budget increase
-mean_profit <- mean(df_rec$sales)
 df_increase <- df_profit %>% 
   filter(percent %in% c(df_high$percent, df_limit$percent)) %>% 
   group_by(percent) %>% 
@@ -807,7 +837,7 @@ After reviewing the project, there are some possible action for us to do:
 
 Deployment is where data mining pays off. It doesn’t matter how brilliant your discoveries may be, or how perfectly your models fit the data, if you don’t actually use those things to improve the way that you do business. We have build the model but how do we use them in real life situation? We can launch the model in several ways. The common method to release a machine learning model into production/real use case is as follows:
 
-* [Building a dashboard](https://argaadya.shinyapps.io/car_sales_classification/)
+* [Building a dashboard](https://argaadya.shinyapps.io/customer-targeting/)
 * [Building an API](https://juan0001.github.io/how-to-deploy-machine-learning-model-overview/)
 
 The deliverable or result of this phase should include:

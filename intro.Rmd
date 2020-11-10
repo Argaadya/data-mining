@@ -21,7 +21,11 @@ knitr::opts_chunk$set(echo = F, message = F, warning = F)
 
 [![](assets/a-day-in-data.jpg){ height=650px }](https://www.weforum.org/agenda/2019/04/how-much-data-is-generated-each-day-cf4bddf29f/)
 
+---
 
+So much data can be collected along the way
+
+![](assets/vsm.png){ height=600px } 
 
 ## Knowledge Discovery from Data
 
